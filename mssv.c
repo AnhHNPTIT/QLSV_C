@@ -35,6 +35,8 @@ struct Score scores[1500];
 int numberStudents = 0;
 int numberSubjects = 0;
 int numberScores = 0;
+struct Student array[1500];
+int cnt = 0;
 
 void readFileStudent()
 {
@@ -78,35 +80,36 @@ void readFileScore()
     fclose(fp);
 }
 
-void writeStudents(struct Student array[], int n)
+void writeStudents(struct Student array[], int cnt)
 {
     FILE *fp = fopen("result.csv", "w");
-    if (n != 0)
+    if (cnt == 1)
     {
-        for (int i = 0; i < n - 1; i++)
+        fprintf(fp, "%s,%s,%s,%s,%s,%s,%s", array[0].StudentID, array[0].FirstName, array[0].LastName, array[0].Gender, array[0].DOB, array[0].ClassName, array[0].Country);
+    }
+    else if (cnt > 1)
+    {
+        for (int i = 0; i < cnt - 1; i++)
         {
             fprintf(fp, "%s,%s,%s,%s,%s,%s,%s\n", array[i].StudentID, array[i].FirstName, array[i].LastName, array[i].Gender, array[i].DOB, array[i].ClassName, array[i].Country);
         }
-        fprintf(fp, "%s,%s,%s,%s,%s,%s,%s", array[n - 1].StudentID, array[n - 1].FirstName, array[n - 1].LastName, array[n - 1].Gender, array[n - 1].DOB, array[n - 1].ClassName, array[n - 1].Country);
+        fprintf(fp, "%s,%s,%s,%s,%s,%s,%s", array[cnt - 1].StudentID, array[cnt - 1].FirstName, array[cnt - 1].LastName, array[cnt - 1].Gender, array[cnt - 1].DOB, array[cnt - 1].ClassName, array[cnt - 1].Country);
     }
     fclose(fp);
 }
 
 bool listStudentsByClassName(char str[])
 {
-    struct Student array[1500];
-    int count = 0;
-
     for (int i = 0; i < numberStudents; i++)
     {
         if (strcmp(students[i].ClassName, str) == 0)
         {
-            array[count] = students[i];
-            count = count + 1;
+            array[cnt] = students[i];
+            cnt = cnt + 1;
         }
     }
 
-    writeStudents(array, count);
+    writeStudents(array, cnt);
     return true;
 }
 
@@ -237,19 +240,16 @@ bool sortStudents(char str[])
 
 bool listStudentsByCountry(char str[])
 {
-    struct Student array2[1500];
-    int count = 0;
-
     for (int i = 0; i < numberStudents; i++)
     {
         if (compareString(students[i].Country, str))
         {
-            array2[count] = students[i];
-            count = count + 1;
+            array[cnt] = students[i];
+            cnt = cnt + 1;
         }
     }
 
-    writeStudents(array2, count);
+    writeStudents(array, cnt);
     return true;
 }
 
